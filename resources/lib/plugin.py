@@ -529,8 +529,12 @@ def play(liz, stream):
     liz.setProperty('inputstream.adaptive.manifest_headers', headers)
     liz.setProperty('inputstream.adaptive.stream_headers', headers)
     if stream.drm:
-        liz.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
-        liz.setProperty('inputstream.adaptive.license_key', rtpplay.widevine_license_key())
+        if KODI_VERSION >= 22:
+            # license_type/license_key are deprecated from inputstream.adaptive 22.2
+            liz.setProperty('inputstream.adaptive.drm_legacy', rtpplay.widevine_drm_legacy())
+        else:
+            liz.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
+            liz.setProperty('inputstream.adaptive.license_key', rtpplay.widevine_license_key())
     setResolvedUrl(plugin.handle, True, liz)
 
 

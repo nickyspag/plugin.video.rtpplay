@@ -251,3 +251,8 @@ def _episode_stream(page):
 def widevine_license_key():
     """License key in the url|headers|body|response format used by inputstream.adaptive."""
     return "{}|{}|R{{SSM}}|".format(WIDEVINE_LICENSE_URL, urlencode(WIDEVINE_LICENSE_HEADERS))
+
+
+def widevine_drm_legacy():
+    """DRM config in the keysystem|license url|headers format of inputstream.adaptive.drm_legacy."""
+    return "com.widevine.alpha|{}|{}".format(WIDEVINE_LICENSE_URL, urlencode(WIDEVINE_LICENSE_HEADERS))
