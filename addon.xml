@@ -28,6 +28,7 @@
                 - Support DRM protected content (RTP2 live and most on demand TV) through inputstream.adaptive and Widevine
                 - Search now lists episodes directly
                 - Log in with your RTP account to use your favourites and continue watching
+                - Browse each category by most recent or A-Z, and see when each program was last updated
         </news>
         <disclaimer lang="en_GB">The plugin is unofficial and not endorsed by RTP. Expect it to break. </disclaimer>
         <disclaimer lang="pt_PT">Este plugin não é oficial nem desenvolvido pela RTP. </disclaimer>

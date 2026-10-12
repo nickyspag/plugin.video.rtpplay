@@ -147,3 +147,11 @@ msgstr ""
 msgctxt "#32032"
 msgid "Could not log in"
 msgstr ""
+
+msgctxt "#32033"
+msgid "Most recent"
+msgstr ""
+
+msgctxt "#32034"
+msgid "A–Z"
+msgstr ""

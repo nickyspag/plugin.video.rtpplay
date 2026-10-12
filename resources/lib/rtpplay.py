@@ -176,14 +176,25 @@ def _parse_items(fragment):
     return items
 
 
-def list_programs(category_id=None, page=1):
-    params = {"listtype": "recent", "type": "all", "page": page}
+def list_programs(category_id=None, page=1, order="recent"):
+    """
+    :param order: "recent" (most recently updated first) or "az", as on the website
+    :return: programs, each with "updated", the date of its latest episode
+    """
+    params = {"listtype": order, "type": "all", "page": page}
     if category_id:
         params["listcategory"] = category_id
-    return _parse_items(_get("/play/bg_l_pg/", params))
+    programs = _parse_items(_get("/play/bg_l_pg/", params))
+    for program in programs:
+        # The tile's hidden meta ends with the latest episode's date, e.g. "Portugalex Ep. 178 12 out. 2026"
+        program["updated"] = _find(r"(\d{1,2} \S+ \d{4})\s*$", program["meta"])
+    return programs
 
 
 def get_category_id(slug):
+    if slug == "tema":
+        # "Todos os programas" is the unfiltered list
+        return ""
     page = _get("/play/programas/{}/canal".format(slug))
     return _find(r"RTPPLAY\.currentHPListCategory = '(\d+)'", page)
 

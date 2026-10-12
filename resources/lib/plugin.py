@@ -47,6 +47,11 @@ def index():
     liveradio = ListItem("[B]{}[/B]".format(kodiutils.get_string(32013)))
     addDirectoryItem(handle=plugin.handle, listitem=liveradio, isFolder=True, url=plugin.url_for(live, content='radio'))
 
+    latest = ListItem("[B]{}[/B]".format(kodiutils.get_string(32033)))
+    addDirectoryItem(handle=plugin.handle, listitem=latest, isFolder=True,
+                     url=plugin.url_for(programs_category, name=kodiutils.get_string(32033), slug="tema",
+                                        order="recent", page=1))
+
     programas = ListItem("[B]{}[/B]".format(kodiutils.get_string(32005)))
     addDirectoryItem(handle=plugin.handle, listitem=programas, isFolder=True, url=plugin.url_for(programs))
 
@@ -144,8 +149,22 @@ def programs():
     for category in rtpplay.get_categories():
         liz = ListItem(category["name"])
         addDirectoryItem(handle=plugin.handle, listitem=liz, isFolder=True,
-                         url=plugin.url_for(programs_category, name=category["name"],
-                                            slug=category["slug"], page=1))
+                         url=plugin.url_for(programs_order, name=category["name"], slug=category["slug"]))
+
+    endOfDirectory(plugin.handle)
+
+
+@plugin.route('/programs/order')
+def programs_order():
+    """The website's two orders for a category: most recently updated, and A-Z."""
+    slug = plugin.args["slug"][0]
+    cat_name = plugin.args["name"][0]
+    cat_id = rtpplay.get_category_id(slug)
+    for order, label in (("recent", 32033), ("az", 32034)):
+        liz = ListItem(kodiutils.get_string(label))
+        addDirectoryItem(handle=plugin.handle, listitem=liz, isFolder=True,
+                         url=plugin.url_for(programs_category, name=cat_name, slug=slug,
+                                            id=cat_id, order=order, page=1))
 
     endOfDirectory(plugin.handle)
 
@@ -155,7 +174,8 @@ def programs_category():
     page = int(plugin.args["page"][0])
     slug = plugin.args["slug"][0]
     cat_name = plugin.args["name"][0]
-    # Resolved once on the first page and carried along; "all programs" has no id
+    order = plugin.args.get("order", ["recent"])[0]
+    # Resolved once and carried along; "all programs" has no id
     if "id" in plugin.args:
         cat_id = plugin.args["id"][0]
     else:
@@ -165,7 +185,7 @@ def programs_category():
     pagei.setProperty('IsPlayable', 'false')
     addDirectoryItem(handle=plugin.handle, listitem=pagei, isFolder=False, url="")
 
-    items = rtpplay.list_programs(cat_id, page)
+    items = rtpplay.list_programs(cat_id, page, order)
     favorite_keys = get_favorite_keys()
     seen = set()
     for program in items:
@@ -176,11 +196,18 @@ def programs_category():
         title = program["title"] or program["meta"]
         img = program["image"]
 
-        liz = ListItem(title)
+        label = title
+        if program["updated"]:
+            # Shows why "most recent" is in the order it is
+            label = "{} [COLOR grey]· {}[/COLOR]".format(title, program["updated"])
+        # The link title is "Aceder a <latest episode>"
+        latest_episode = re.sub(r"^Aceder a ", "", program["link_title"])
+
+        liz = ListItem(label)
         liz.setArt({"thumb": img,
                     "icon": img,
                     "fanart": kodiutils.FANART})
-        liz.setInfo("Video", infoLabels={"plot": program["link_title"],
+        liz.setInfo("Video", infoLabels={"plot": latest_episode,
                                          "title": title})
         liz.addContextMenuItems(favorite_context_menu(program["program_id"], program["slug"], favorite_keys))
 
@@ -200,7 +227,7 @@ def programs_category():
                                                            kodiutils.get_string(32009), newpage))
         addDirectoryItem(handle=plugin.handle, listitem=nextpage, isFolder=True,
                          url=plugin.url_for(programs_category, name=cat_name, slug=slug,
-                                            id=cat_id, page=newpage))
+                                            id=cat_id, order=order, page=newpage))
 
     endOfDirectory(plugin.handle)
 

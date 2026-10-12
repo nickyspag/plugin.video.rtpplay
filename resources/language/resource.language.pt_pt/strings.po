@@ -147,3 +147,11 @@ msgstr "Removido dos favoritos"
 msgctxt "#32032"
 msgid "Could not log in"
 msgstr "Não foi possível iniciar sessão"
+
+msgctxt "#32033"
+msgid "Most recent"
+msgstr "Mais recentes"
+
+msgctxt "#32034"
+msgid "A–Z"
+msgstr "A–Z"

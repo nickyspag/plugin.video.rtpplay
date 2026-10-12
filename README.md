@@ -15,7 +15,8 @@ funcionar.
 
 - TV em direto (RTP1, RTP2, RTP Notícias, RTP Memória, RTP Internacional, ...)
   e rádio em direto (Antena 1, 2, 3, ...)
-- Programas por categoria, com todos os episódios
+- Os programas mais recentes, e programas por categoria, ordenados pelos mais
+  recentes ou de A a Z, com todos os episódios
 - Pesquisa
 - Início de sessão opcional na conta RTP, para **Os seus favoritos** e
   **Continuar a ver**, sincronizados com o site e as aplicações RTP Play
@@ -119,7 +120,8 @@ change its website at any time, which may break the add-on.
 
 - Live TV (RTP1, RTP2, RTP Notícias, RTP Memória, RTP Internacional, ...) and
   live radio (Antena 1, 2, 3, ...)
-- Programs by category, with all their episodes
+- The most recently updated programs, and programs by category, sorted by most
+  recent or A–Z, with all their episodes
 - Search
 - Optional RTP account login, for **Os seus favoritos** and **Continuar a ver**,
   kept in sync with the RTP Play website and apps
